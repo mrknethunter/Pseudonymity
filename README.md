@@ -1,5 +1,9 @@
 # Pseudonymity
 
+![Python](https://img.shields.io/badge/Language-Python-blue?logo=python)
+![Go](https://img.shields.io/badge/Language-Go-00ADD8?logo=go&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
+
 Pseudonymity is a configurable data pseudonymisation toolkit for privacy engineering work. It is both a command-line tool and an importable Python library. Optionally, it can be used also through a QT-based GUI.
 
 It supports JSON profiles, deterministic HMAC-SHA256 tokenisation, masking, generalisation, perturbation, vault-backed re-identification, accountability manifests and risk screening. It also includes an optional Go risk engine component for k-anonymity-style checks.
