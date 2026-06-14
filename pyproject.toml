@@ -1,0 +1,39 @@
+[project]
+name = "pseudonymity"
+version = "1.0.0"
+description = "Pseudonymity: configurable data pseudonymisation toolkit with vault-backed re-identification."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Privacy Engineering Demo Maintainers" }
+]
+keywords = ["privacy", "pseudonymisation", "pseudonymization", "gdpr", "enisa", "data-protection"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Legal Industry",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Security",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.scripts]
+pseudonymity = "pseudonymity.cli:main"
+pseudonymity-gui = "pseudonymity.gui:run_gui"
+
+[project.optional-dependencies]
+gui = ["PySide6>=6.7"]
+dev = ["build>=1.2"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-data]
+pseudonymity = ["py.typed"]

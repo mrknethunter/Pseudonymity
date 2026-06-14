@@ -1,0 +1,249 @@
+{
+  "description": "E-commerce sample profile with direct, indirect and quasi-identifier treatment.",
+  "name": "ecommerce-default",
+  "required_columns": [
+    "customer_id",
+    "first_name",
+    "last_name",
+    "email",
+    "phone",
+    "date_of_birth",
+    "street_address",
+    "city",
+    "region",
+    "postal_code",
+    "last_login_ip",
+    "signup_date",
+    "subscription_plan",
+    "purchase_category",
+    "purchase_amount_eur",
+    "support_tickets",
+    "churn_risk_score",
+    "loyalty_points",
+    "preferred_channel",
+    "marketing_consent",
+    "diagnosis_code"
+  ],
+  "risk": {
+    "quasi_identifier_sets": [
+      [
+        "region",
+        "age_band"
+      ],
+      [
+        "region",
+        "age_band",
+        "postal_area"
+      ],
+      [
+        "region",
+        "birth_decade",
+        "postal_area",
+        "purchase_category"
+      ],
+      [
+        "region",
+        "age_band",
+        "diagnosis_group",
+        "purchase_amount_band"
+      ]
+    ]
+  },
+  "rules": [
+    {
+      "length": 18,
+      "namespace": "email",
+      "output": "email_token",
+      "source": "email",
+      "technique": "hmac_token"
+    },
+    {
+      "output": "email_masked",
+      "source": "email",
+      "technique": "mask_email"
+    },
+    {
+      "length": 18,
+      "namespace": "phone",
+      "output": "phone_token",
+      "source": "phone",
+      "technique": "hmac_token"
+    },
+    {
+      "output": "phone_masked",
+      "source": "phone",
+      "technique": "mask_phone",
+      "visible_digits": 2
+    },
+    {
+      "length": 18,
+      "namespace": "ip",
+      "output": "ip_token",
+      "source": "last_login_ip",
+      "technique": "hmac_token"
+    },
+    {
+      "output": "email_domain",
+      "source": "email",
+      "technique": "email_domain"
+    },
+    {
+      "output": "birth_year",
+      "part": "year",
+      "source": "date_of_birth",
+      "technique": "date_part"
+    },
+    {
+      "output": "birth_decade",
+      "source": "date_of_birth",
+      "technique": "birth_decade"
+    },
+    {
+      "output": "age_band",
+      "source": "date_of_birth",
+      "technique": "age_band"
+    },
+    {
+      "digits": 3,
+      "output": "postal_area",
+      "source": "postal_code",
+      "technique": "postal_area"
+    },
+    {
+      "output": "region",
+      "source": "region",
+      "technique": "keep"
+    },
+    {
+      "output": "ip_subnet_24",
+      "prefix": 24,
+      "source": "last_login_ip",
+      "technique": "ip_subnet"
+    },
+    {
+      "output": "signup_month",
+      "part": "month",
+      "source": "signup_date",
+      "technique": "date_part"
+    },
+    {
+      "max_days": 21,
+      "output": "signup_date_shifted",
+      "source": "signup_date",
+      "technique": "date_shift"
+    },
+    {
+      "output": "subscription_plan",
+      "source": "subscription_plan",
+      "technique": "keep"
+    },
+    {
+      "output": "purchase_category",
+      "source": "purchase_category",
+      "technique": "keep"
+    },
+    {
+      "bands": [
+        0,
+        50,
+        100,
+        250,
+        500,
+        1000
+      ],
+      "output": "purchase_amount_band",
+      "source": "purchase_amount_eur",
+      "technique": "numeric_band",
+      "unit": "EUR"
+    },
+    {
+      "decimals": 2,
+      "output": "purchase_amount_eur_noisy",
+      "scale": 5.0,
+      "source": "purchase_amount_eur",
+      "technique": "numeric_noise"
+    },
+    {
+      "output": "support_tickets",
+      "source": "support_tickets",
+      "technique": "keep"
+    },
+    {
+      "decimals": 2,
+      "max": 1,
+      "min": 0,
+      "output": "churn_risk_score_noisy",
+      "scale": 0.03,
+      "source": "churn_risk_score",
+      "technique": "numeric_noise"
+    },
+    {
+      "bands": [
+        0,
+        100,
+        500,
+        1000,
+        2500,
+        5000,
+        10000
+      ],
+      "output": "loyalty_points_band",
+      "source": "loyalty_points",
+      "technique": "numeric_band",
+      "unit": "pts"
+    },
+    {
+      "output": "preferred_channel",
+      "source": "preferred_channel",
+      "technique": "keep"
+    },
+    {
+      "output": "marketing_consent",
+      "source": "marketing_consent",
+      "technique": "keep"
+    },
+    {
+      "default": "other",
+      "mapping": {
+        "E11": "metabolic",
+        "F41": "mental-health",
+        "I10": "cardio",
+        "J45": "respiratory",
+        "M54": "musculoskeletal",
+        "NONE": "none"
+      },
+      "output": "diagnosis_group",
+      "source": "diagnosis_code",
+      "technique": "category_map"
+    }
+  ],
+  "schema_version": "1.0",
+  "subject_id": {
+    "length": 18,
+    "namespace": "subject",
+    "output": "subject_pseudo_id",
+    "source": "customer_id",
+    "technique": "hmac_token"
+  },
+  "vault": {
+    "include_original_fields": [
+      "customer_id",
+      "first_name",
+      "last_name",
+      "email",
+      "phone",
+      "date_of_birth",
+      "street_address",
+      "city",
+      "region",
+      "postal_code",
+      "last_login_ip",
+      "signup_date",
+      "purchase_amount_eur",
+      "churn_risk_score",
+      "loyalty_points",
+      "diagnosis_code"
+    ],
+    "token_column": "subject_pseudo_id"
+  }
+}

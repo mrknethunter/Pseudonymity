@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+dist/
+build/
+*.egg-info/
+tools/
+
+# Demo outputs can be regenerated. Keep them out of production repos by default.
+output/
+vault/
+
+tests/
